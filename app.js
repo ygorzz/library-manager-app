@@ -1,5 +1,5 @@
 import { createInterface } from 'readline'
-import { cadastrarLivro, removerLivro, listarLivros, marcarComoNaoLido, marcarComoLido, semResposta, filtrarPosicaoLivro} from './utils.js'
+import { cadastrarLivro, removerLivro, listarLivros, marcarComoNaoLido, marcarComoLido, semResposta, filtrarPosicaoLivro } from './utils.js'
 import { log } from 'console'
 
 const reader = createInterface({
@@ -14,116 +14,117 @@ export function mostrarMenu() {
 
     setTimeout(() => {
         reader.question('O que gostaria de fazer?\n a) Adicionar novo livro \n b) Listar livros \n c) Marcar como lido/não lido \n d) Remover livro \n e) Sair \n > ', crud => {
-    
+
             // Adiciona um novo livro
             if (crud.toLowerCase() === 'a') {
-    
+
                 // Fluxo para cadastrar um livro
                 pedirInfosLivro(livro => {
-    
+
                     const add = cadastrarLivro(caminhoArquivo, livro)
-    
+
                     if (add) {
                         console.log('\nLivro adicionado com sucesso!')
                     }
-    
+
                     mostrarMenu()
-    
+
                 })
-    
+
                 // Listar livros
             } else if (crud.toLowerCase() === 'b') {
-    
+
                 const livrosAtuais = listarLivros(caminhoArquivo)
-    
+
                 console.log('\nLivros atuais:\n\n', livrosAtuais, '\n')
                 mostrarMenu()
-    
+
                 // Marcar com lido/não lido
             } else if (crud.toLowerCase() === 'c') {
-    
+
                 reader.question('\nQual livro você gostaria de marcar como lido/não lido? ', titulo => {
-    
+
                     const livrosAtuais = listarLivros(caminhoArquivo)
-    
+
                     const posicaoLivro = filtrarPosicaoLivro(livrosAtuais, titulo.toLowerCase())
-    
+
                     // Se o findIndex retornar -1
                     if (posicaoLivro === -1) {
                         console.log('\nEsse livro não existe na sua biblioteca!\n')
                         mostrarMenu()
-    
+
                     } else {
-    
-                        const livro = livrosAtuais[posicaoLivro] 
-                        const lido = livrosAtuais[posicaoLivro].lido
+
+                        const livro = livrosAtuais[posicaoLivro]
+                        // Destructuring
+                        const { lido } = livrosAtuais[posicaoLivro]
                         console.log(livro)
-    
+
                         if (lido) {
                             reader.question('Deseja marcar como não lido? (Sim/Não) \n > ', resposta => {
-                                
+
                                 // success -> armazena true/false
                                 const success = marcarComoNaoLido(caminhoArquivo, resposta, posicaoLivro)
-    
+
                                 if (success) {
                                     console.log('\nLivro marcado como não lido!\n')
-    
+
                                 } else {
                                     console.log('\nNenhuma alteração foi feita.\n')
                                 }
-    
+
                                 mostrarMenu()
-    
+
                             })
-    
+
                         } else {
                             reader.question('Deseja marcar como lido? (Sim/Não) \n > ', resposta => {
-    
+
                                 // success -> armazena true/false
                                 const success = marcarComoLido(caminhoArquivo, resposta, posicaoLivro)
-    
+
                                 if (success) {
                                     console.log('\nLivro marcado como lido!\n')
-    
+
                                 } else {
                                     console.log('\nNenhuma alteração foi feita.\n')
                                 }
-    
+
                                 mostrarMenu()
-    
+
                             })
                         }
                     }
                 })
-    
+
                 // Remover Livro
             } else if (crud.toLowerCase() === 'd') {
-    
+
                 // Aprender como remover os dados no JSON
                 reader.question('Qual livro deseja remover? ', titulo => {
-    
+
                     const livrosAtuais = listarLivros(caminhoArquivo)
                     const posicaoLivro = filtrarPosicaoLivro(livrosAtuais, titulo.toLowerCase())
-    
+
                     if (posicaoLivro === -1) {
                         console.log('\nEsse livro não existe na sua biblioteca.\n')
-    
+
                     } else {
-    
+
                         const remove = removerLivro(caminhoArquivo, livrosAtuais, posicaoLivro)
-    
-                        if(remove !== false){
-                        
+
+                        if (remove !== false) {
+
                             console.log('\nLivro removido com sucesso!\n')
-    
+
                         }
-    
+
                     }
-    
+
                     mostrarMenu()
                 })
-    
-    
+
+
                 // Sair
             } else if (crud.toLowerCase() === 'e') {
                 reader.close()
