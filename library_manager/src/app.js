@@ -7,7 +7,7 @@ const reader = createInterface({
     output: process.stdout
 })
 
-const caminhoArquivo = './src/livros.json'
+const caminhoArquivo = '../data/livros.json'
 
 // Por ser um projeto pequeno não me preocupei com risco de stack overflow por causa das recursões
 export function mostrarMenu() {
