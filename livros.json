@@ -1,0 +1,14 @@
+[
+  {
+    "titulo": "sda",
+    "autor": "tolkien",
+    "categoria": "aventura",
+    "lido": false
+  },
+  {
+    "titulo": "O Hobbit",
+    "autor": "Tolkien",
+    "categoria": "Aventura",
+    "lido": true
+  }
+]
